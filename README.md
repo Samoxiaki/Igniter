@@ -82,8 +82,7 @@ java Example1
 	
 ```
 
-**Parsing 1 optional argument (boolean) and 1 required (float)**
-**(Printing help message)**
+**Parsing 1 optional argument (float) and 1 required (boolean) (Printing help message)**
 ```java
 public class Example2 {
 
