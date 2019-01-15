@@ -133,11 +133,11 @@ Outputs:
 java Example2 --boolean --float 999.666
 
 		--boolean, -b	:Boolean option.
-						:Default: false
-						[REQUIRED]
+				:Default: false
+				[REQUIRED]
 
-		--float, -f		:Float option.
-						:Default: 123.321
+		--float, -f	:Float option.
+				:Default: 123.321
 
 	------------------------
 	Parsed arguments: 2
@@ -148,11 +148,11 @@ java Example2 --boolean --float 999.666
 java Example2 --boolean
 
 		--boolean, -b	:Boolean option.
-						:Default: false
-						[REQUIRED]
+				:Default: false
+				[REQUIRED]
 
-		--float, -f		:Float option.
-						:Default: 123.321
+		--float, -f	:Float option.
+				:Default: 123.321
 
 	------------------------
 	Parsed arguments: 1
@@ -163,11 +163,11 @@ java Example2 --boolean
 java Example2 --float 999.666
 
 		--boolean, -b	:Boolean option.
-						:Default: false
-						[REQUIRED]
+				:Default: false
+				[REQUIRED]
 
-		--float, -f		:Float option.
-						:Default: 123.321
+		--float, -f	:Float option.
+				:Default: 123.321
 
 	------------------------
 	[!] The following required arguments are missing:
