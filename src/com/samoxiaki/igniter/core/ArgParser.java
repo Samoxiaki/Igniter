@@ -148,17 +148,23 @@ public class ArgParser {
         StringBuilder sb= new StringBuilder();
         for(Option opt : options){
             if(opt.hasAuxName()){
-               sb.append("\t").append(opt.getName()).append(", ").append(opt.getAuxName()).append("\t:").append(opt.getDescription());
+               sb.append("\t").append(opt.getName()).append(", ").append(opt.getAuxName()).append("\t|").append(opt.getDescription());
             }
             else{
-               sb.append("\t").append(opt.getName()).append("\t\t:").append(opt.getDescription());
+               sb.append("\t").append(opt.getName()).append("\t\t|").append(opt.getDescription());
             }
             if(opt.getDescription().length()!=0 && opt.getDescription()!=null){
-                   sb.append("\n\t\t\t:");
+                   sb.append("\n\t\t\t|");
                }
             sb.append("Default: ").append(opt.getDefaultValue());
-            if(opt.isRequired()){
-                sb.append("\n\t\t\t[REQUIRED]");
+            if(opt.isRequired() || opt.isStandalone()){
+                sb.append("\n\t\t\t");
+                if(opt.isRequired()){
+                        sb.append("[REQUIRED]");
+                }
+                if(opt.isStandalone()){
+                        sb.append("[STANDALONE]");
+                }
             }
             sb.append("\n\n");
         }
@@ -171,6 +177,7 @@ public class ArgParser {
         ArrayList<Option> usedOptions = new ArrayList<>();
         int index=0;
         int parsed=0;
+        boolean parsedStandalone=false;
         if(args.length>0){
             while(index<args.length){
                 int optIndex=checkOption(args[index]);
@@ -238,6 +245,9 @@ public class ArgParser {
                     else{
                         usedOptions.add(options.get(optIndex));
                     }
+                    if(options.get(optIndex).isStandalone() && parsedStandalone==false){
+                        parsedStandalone=true;
+                    }
                     requiredOptions.remove(options.get(optIndex));
                     index++;
                     parsed++;
@@ -248,6 +258,9 @@ public class ArgParser {
                 } 
             }
             
+        }
+        if(parsedStandalone && parsed==1){
+            return parsed;
         }
         if(requiredOptions.size()>0){
                 resetAll();

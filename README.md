@@ -4,13 +4,13 @@ Igniter is a Java library designed to parse command line arguments in an easy wa
 
 It contains two main classes:
 
-**Option.java**: 	`Option` allows you to define the name or names of the desired option, its default value and the expected type of that value.
-					 Also, it lets you add a description of its purpose, used when calling `getHelpDescription()` in the following class.
+**Option.java**: 	`Option` allows you to define the name or names of the desired option, a description, its default value and the expected type of that value.
+					 Options can be set as required or as standalone. Required options need to be passed through command line or an exception is thrown. Standalone options can ignore required options if the arguments parsed amount is 1, otherwise the general rules apply.
 				  
 **ArgParser.java**: `ArgParser` is where `Option` objects are added. When an array of `String` objects is given, it parses all its data and stores the 
 					 obtained values into its corresponding options and returns the number of arguments parsed or throws an exception if it founds any errors. These values can be retrieved after parsing by just providing the name of the option you want to get its value. A type cast is needed to assing this value to a new variable.
 					 Supports `boolean`, `byte`, `char`, `double`, `float`, `int`, `long` and `String` types. 
-					 Calling `getHelpDescription()` will give you a help-like message stored in a `String` similar to the commonly used help commands in usual console applications.
+					 Calling `getHelpDescription()` will give you a help-like message as a `String` similar to the commonly used help commands in usual console applications.
 
 ## Examples
 
@@ -82,8 +82,7 @@ java Example1
 	
 ```
 
-**Parsing 1 optional argument (boolean) and 1 required (float)**
-**(Printing help message)**
+**Parsing 1 optional argument (float) and 1 required (boolean)**
 ```java
 public class Example2 {
 
@@ -94,7 +93,8 @@ public class Example2 {
         float defaultVal2 = 123.321f;
         
         // Create new Option(s)
-        Option opt1 = new Option("--boolean", "-b", defaultVal1, "Boolean option.", true, boolean.class);
+        Option opt1 = new Option("--boolean", "-b", defaultVal1, "Boolean option.", boolean.class);
+        opt1.setRequired(true);
         Option opt2 = new Option("--float", "-f", defaultVal2, "Float option.", float.class);
 
         // Create new ArgParser
@@ -102,9 +102,6 @@ public class Example2 {
         argP.addOption(opt1);
         argP.addOption(opt2);
         
-        // Print help message
-        System.out.println(argP.getHelpDescription());
-        System.out.println("------------------------");
         
         // Parse arguments
         int parsedArgs=0;
@@ -132,14 +129,6 @@ Outputs:
 ```
 java Example2 --boolean --float 999.666
 
-		--boolean, -b	:Boolean option.
-						:Default: false
-						[REQUIRED]
-
-		--float, -f		:Float option.
-						:Default: 123.321
-
-	------------------------
 	Parsed arguments: 2
 	Boolean: true
 	Float  : 999.666
@@ -147,14 +136,6 @@ java Example2 --boolean --float 999.666
 ```
 java Example2 --boolean
 
-		--boolean, -b	:Boolean option.
-						:Default: false
-						[REQUIRED]
-
-		--float, -f		:Float option.
-						:Default: 123.321
-
-	------------------------
 	Parsed arguments: 1
 	Boolean: true
 	Float  : 123.321
@@ -162,14 +143,6 @@ java Example2 --boolean
 ```
 java Example2 --float 999.666
 
-		--boolean, -b	:Boolean option.
-						:Default: false
-						[REQUIRED]
-
-		--float, -f		:Float option.
-						:Default: 123.321
-
-	------------------------
 	[!] The following required arguments are missing:
 		--boolean, -b
 
@@ -177,7 +150,74 @@ java Example2 --float 999.666
 	Boolean: false
 	Float  : 123.321
 ```
+**Parsing a standalone argument and a required argument**
+```java
+public class Example3 {
 
+    public static void main(String[] args) {
+        
+        // Default values
+        boolean defaultVal1 = false;
+        float defaultVal2 = 123.321f;
+        
+        // Create new Option(s)
+        Option opt1 = new Option("--help", "-h", defaultVal1, "Shows this message and exits", boolean.class);
+        opt1.setStandalone(true);
+        Option opt2 = new Option("--float", "-f", defaultVal2, "Float option.", float.class);
+        opt2.setRequired(true);
+
+        // Create new ArgParser
+        ArgParser argP = new ArgParser();
+        argP.addOption(opt1);
+        argP.addOption(opt2);
+        
+        // Parse arguments
+        int parsedArgs=0;
+        try {
+            parsedArgs= argP.parse(args);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+        // Print help message and exit
+        
+        if((boolean)argP.getValue("-h")){
+            System.out.println("Available arguments: ");
+            System.out.println(argP.getHelpDescription());
+            System.exit(0);
+        }
+
+        // Read argument(s) value(s)
+        float opt2Val= (float)argP.getValue("-f");
+        
+        
+        
+        // Print value(s)
+        System.out.println("Parsed arguments: " + parsedArgs);
+        System.out.println("Float  : " + opt2Val);
+    }
+}
+```
+Outputs:
+```
+java Example3 --help
+
+	Available arguments: 
+	--help, -h	|Shows this message and exits
+			|Default: false
+			[STANDALONE]
+
+	--float, -f	|Float option.
+			|Default: 123.321
+			[REQUIRED]
+```
+```
+java Example3 --float 12345
+
+	Parsed arguments: 1
+	Float  : 12345.0
+```
 
 ## Author
 

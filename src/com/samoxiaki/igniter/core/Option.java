@@ -40,6 +40,7 @@ public class Option {
     private Class type;
     private String description;
     private boolean required;
+    private boolean standalone;
 
     /**
      * Constructs a newly allocated {@code Option} object with no attributes.
@@ -51,29 +52,9 @@ public class Option {
         this.defaultValue = null;
         this.value = null;
         this.type = Object.class;
-        this.description = "";
+        this.description = null;
         this.required = false;
-    }
-
-    /**
-     * Constructs a newly allocated {@code Option} object with the given
-     * attributes.
-     *
-     * @param name {@code Option} main name.
-     * @param auxName {@code Option} auxiliar name.
-     * @param defaultValue {@code Option} default value.
-     * @param description a description of the option.
-     * @param required set to true to define {@code Option} as required.
-     * @param type stored value class type.
-     */
-    public Option(String name, String auxName, Object defaultValue, String description, boolean required, Class type) {
-        this.name = name;
-        this.auxName = auxName;
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-        this.type = type;
-        this.description = description;
-        this.required = required;
+        this.standalone=false;
     }
 
     /**
@@ -96,25 +77,6 @@ public class Option {
         this.required = false;
     }
 
-    /**
-     * Constructs a newly allocated {@code Option} object with the given
-     * attributes.
-     *
-     * @param name {@code Option} main name.
-     * @param defaultValue {@code Option} default value.
-     * @param description a description of the option.
-     * @param required set to true to define {@code Option} as required.
-     * @param type stored value class type.
-     */
-    public Option(String name, Object defaultValue, String description, boolean required, Class type) {
-        this.name = name;
-        this.auxName = name;
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-        this.type = type;
-        this.description = description;
-        this.required = required;
-    }
 
     /**
      * Constructs a newly allocated {@code Option} object with the given
@@ -135,24 +97,6 @@ public class Option {
         this.required = false;
     }
 
-    /**
-     * Constructs a newly allocated {@code Option} object with the given
-     * attributes.
-     *
-     * @param name {@code Option} main name.
-     * @param defaultValue {@code Option} default value.
-     * @param required set to true to define {@code Option} as required.
-     * @param type stored value class type.
-     */
-    public Option(String name, Object defaultValue, boolean required, Class type) {
-        this.name = name;
-        this.auxName = name;
-        this.defaultValue = defaultValue;
-        this.value = defaultValue;
-        this.type = type;
-        this.description = "";
-        this.required = required;
-    }
 
     /**
      * Constructs a newly allocated {@code Option} object with the given
@@ -231,6 +175,14 @@ public class Option {
         this.type = type;
     }
 
+    public boolean isStandalone() {
+        return standalone;
+    }
+
+    public void setStandalone(boolean standalone) {
+        this.standalone = standalone;
+    }
+    
     public boolean equals(String optName) {
         return this.auxName.equals(optName) || this.name.equals(optName);
     }
