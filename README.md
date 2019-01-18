@@ -161,7 +161,7 @@ public class Example3 {
         float defaultVal2 = 123.321f;
         
         // Create new Option(s)
-        Option opt1 = new Option("--help", "-h", defaultVal1, "Shows this message and exits", boolean.class);
+        Option opt1 = new Option("--help", "-h", defaultVal1, "Shows this message and exits.", boolean.class);
         opt1.setStandalone(true);
         Option opt2 = new Option("--float", "-f", defaultVal2, "Float option.", float.class);
         opt2.setRequired(true);
@@ -204,7 +204,7 @@ Outputs:
 java Example3 --help
 
 	Available arguments: 
-	--help, -h	|Shows this message and exits
+	--help, -h	|Shows this message and exits.
 			|Default: false
 			[STANDALONE]
 
